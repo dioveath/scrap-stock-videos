@@ -1,0 +1,32 @@
+{
+  "name": "freevideos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-flash-message": "^2.1.0",
+    "express-session": "^1.17.2",
+    "follow-redirects": "^1.14.1",
+    "google-auth-library": "^7.2.0",
+    "googleapis": "^80.1.0",
+    "nodemon": "^2.0.9",
+    "open": "^8.2.1",
+    "passport": "^0.4.1",
+    "passport-google-oauth": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "pexels": "^1.2.1",
+    "prettier": "^2.3.2",
+    "server-destroy": "^1.0.1"
+  },
+  "bin": {
+    "hello": "./bin/index.js"
+  }
+}
