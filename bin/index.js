@@ -108,8 +108,6 @@ async function downloadVideoFiles(search, max) {
       var link = video.video_files[0].link;
       console.log(link + " Ready!");
       var newFile = `${getReadableNameFromURL(video.url)} -${video.id}.mp4`;
-      // var newFile = `${video.id}.mp4`;
-
       console.log(newFile);
       var path = DOWNLOAD_DIR + newFile;
       downloadFile(link, path, () => {
@@ -120,38 +118,59 @@ async function downloadVideoFiles(search, max) {
   });
 }
 
+
 // uploads not uploaded videos
 async function uploadAllVideos(client) {
   try {
     var files = getNotUploadedList();
-    files.forEach(function (fileName) {
+
+    for(var i = 0; i < files.length; i++){
+      var fileName = files[i];
       var filePath = DOWNLOAD_DIR + fileName;
       if (!fs.existsSync(filePath)) {
         console.log(`${filePath} doesn't exist and skipped!`);
         return;
       }
-      uploadMedia(
+      var uploadedFile = await uploadMedia(
         client,
         DOWNLOAD_DIR + fileName,
         fileName + " | Free Stock Videos",
         `Free Stock Videos 
-         - Description
-${fileName} is free to use video. Don't forget to credit to Pexels. You can get more videos at pexels.com`
-      )
-        .then((uploadedFile) => {
-          console.log(`Upload Complete of ${uploadedFile}`);
-          addNewUploadToReg(uploadedFile);
-        })
-        .catch((error) => {
-          console.log("Uploading Error: " + error.message);
-        });
-    });
-  } catch (error) {
-    console.log(
-      `FILE:${DOWNLOAD_REG}: Couldn't load regfile | ${error.message}`
-    );
+- Description
+${fileName} is free to use video. Don't forget to credit to Pexels. You can get more videos at pexels.com
+Free Videos
+Free Stock Videos
+Free Footage
+Stock Footage
+Free Stock Footage
+Pexels Videos
+`
+      );
+      if(uploadedFile){
+        console.log(`Upload Complete of ${uploadedFile}`);
+        addNewUploadToReg(uploadedFile);
+      }
+      else { 
+        console.log("Uploading Error: " + error.message);
+      }
+
+      // NOTE: Youtube is not listing it public | we wait to check if any differences
+      console.log("Waiting 30 seconds for another upload!");
+      sleep(30000);
+    }
+  } catch(error){
+    console.log("Upload error: " + error.message);
   }
 }
+
+
+
+function sleep(ms){
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 
 async function uploadMedia(client, fileName, title, description) {
   var service = google.youtube("v3");
@@ -171,6 +190,7 @@ async function uploadMedia(client, fileName, title, description) {
         },
         status: {
           privacyStatus: "public",
+          selfDeclaredMadeForKids: false,
         },
       },
       media: {

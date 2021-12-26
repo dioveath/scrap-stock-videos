@@ -122,6 +122,5 @@ dist
 *.*~
 *.*#
 chromedriver.exe
-create_thumbnail.bat
 client_secret.json
 /videos
