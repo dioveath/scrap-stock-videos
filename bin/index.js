@@ -111,7 +111,11 @@ async function downloadVideoFiles(search, max) {
       console.log(newFile);
       var path = DOWNLOAD_DIR + newFile;
       downloadFile(link, path, () => {
-        addNewDownloadToReg(newFile);
+        createNewVideoJsonFile({
+          title: newFile,
+          description: "Description: " + newFile,
+          tags: newFile.split(' ')
+        });
         console.log(`Download complete: ${newFile}`);
       });
     });
@@ -285,4 +289,16 @@ function getNotUploadedList() {
   });
 
   return nuFiles;
+}
+
+function createNewVideoJsonFile(file){
+  try {
+    let json = JSON.stringify(file);
+    let jsonFile = DOWNLOAD_DIR + "json/" + file.title.split('.')[0] + ".json";
+    fs.writeFile(jsonFile, json, 'utf-8', () => {
+      console.log("Created json file: " + jsonFile);
+    });
+  } catch(err){
+    console.log(err.message);
+  }
 }
